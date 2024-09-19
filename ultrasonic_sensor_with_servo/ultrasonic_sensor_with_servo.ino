@@ -9,7 +9,7 @@ const int ep=11;
 
 void setup() {
   // put your setup code here, to run once:
-  s1.attach(13);
+  s1.attach(6);
   //pinMode(13,OUTPUT);
   pinMode(tp,OUTPUT);
   pinMode(ep,INPUT);
