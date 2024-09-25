@@ -2,11 +2,11 @@
 * in3 (HIGH) := Is going backwards of right when looking from the perspective of ultrasonic
 * in1 (HIGH) := Is going backwards of left when looking from the perspective of ultrasonic
 */
-#define FRS A0
-#define FLS A1
-#define RS 11
-#define MS 12
-#define LS 13 // Pin where the IR sensor is connected
+#define FRS A1
+#define FLS A5
+#define RS A2
+#define MS A3
+#define LS A4 // Pin where the IR sensor is connected
 int ivm = 0;
 int ivl = 0;
 int ivr = 0;   // Variable to store the value from the sensor
@@ -15,12 +15,12 @@ long dur;
 int dis;
 
 const int ena = 5;
-#define LM1 7
-#define LM2 6
+#define LM1 10
+#define LM2 9
 
-#define RM1 9
-#define RM2 8
-const int enb = 10;
+#define RM1 12
+#define RM2 11
+const int enb = 6;
 
 const int tp = 3;
 const int ep = 4;
@@ -198,7 +198,7 @@ void loop() {
   {
     if(digitalRead(FLS))
     {
-          digitalWrite(LM1, LOW);
+    digitalWrite(LM1, LOW);
     digitalWrite(LM2, HIGH);
     digitalWrite(RM1, LOW); 
     digitalWrite(RM2, LOW);
