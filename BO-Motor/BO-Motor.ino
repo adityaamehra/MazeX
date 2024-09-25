@@ -2,7 +2,8 @@
 * in3 (HIGH) := Is going backwards of right when looking from the perspective of ultrasonic
 * in1 (HIGH) := Is going backwards of left when looking from the perspective of ultrasonic
 */
-
+#define FRS A0
+#define FLS A1
 #define RS 11
 #define MS 12
 #define LS 13 // Pin where the IR sensor is connected
@@ -101,6 +102,8 @@ void setup() {
   pinMode(MS, INPUT);
   pinMode(LS, INPUT);
   pinMode(RS, INPUT);
+  pinMode(FRS, INPUT);
+  pinMode(FLS, INPUT);
   pinMode(tp,OUTPUT);
   pinMode(ep,INPUT);
   pinMode(ena, OUTPUT);
@@ -119,6 +122,41 @@ void setup() {
 void loop() {
   
 
+  // if(digitalRead(MS))     // Middle Sensor On Line
+  // {
+  //   if((!digitalRead(LS) || !digitalRead(FLS)) && (!digitalRead(RS) || !digitalRead(FRS))) //LS and RS not on line
+  //   {
+  //   Serial.println("move forward");
+  //   digitalWrite(LM1, LOW);
+  //   digitalWrite(LM2, HIGH);
+  //   digitalWrite(RM1, LOW);
+  //   digitalWrite(RM2, HIGH);
+  //   }
+  //   else if((digitalRead(LS) || digitalRead(FLS))&& (!digitalRead(RS) || !digitalRead(FRS))) //Sharp Left
+  //   {
+  //   Serial.println("Sharp Left");
+  //   digitalWrite(LM1, LOW);
+  //   digitalWrite(LM2, HIGH);
+  //   digitalWrite(RM1, HIGH); 
+  //   digitalWrite(RM2, LOW);
+  //   }
+  //   else if((!digitalRead(FLS) || !digitalRead(LS)) && (digitalRead(RS) || digitalRead(FRS))) //Sharp Right
+  //   {
+  //   Serial.println("Sharp Right");
+  //   digitalWrite(LM1, HIGH);
+  //   digitalWrite(LM2, LOW);
+  //   digitalWrite(RM1, LOW);
+  //   digitalWrite(RM2, HIGH);
+  //   }
+  //   else if((digitalRead(LS) || digitalRead(FLS))&& (digitalRead(RS) || digitalRead(FRS)))
+  //   {
+  //   digitalWrite(LM1, LOW);
+  //   digitalWrite(LM2, LOW);
+  //   digitalWrite(RM1, LOW);
+  //   digitalWrite(RM2, LOW);
+  //   Serial.println("Stop");
+  //   }
+  // }
   if(digitalRead(MS))     // Middle Sensor On Line
   {
     if(!digitalRead(LS) && !digitalRead(RS)) //LS and RS not on line
@@ -156,23 +194,39 @@ void loop() {
   }
   else
   {
-  if(digitalRead(LS) && !digitalRead(RS))     // Turn left
+  if((digitalRead(LS) || digitalRead(FLS))&& (!digitalRead(RS) || !digitalRead(FRS)))   // Turn left
   {
+    if(digitalRead(FLS))
+    {
+          digitalWrite(LM1, LOW);
+    digitalWrite(LM2, HIGH);
+    digitalWrite(RM1, LOW); 
+    digitalWrite(RM2, LOW);
+    delay(60);
+    }
     digitalWrite(LM1, LOW);
     digitalWrite(LM2, HIGH);
     digitalWrite(RM1, LOW); 
     digitalWrite(RM2, LOW);
     Serial.println("Left");
   }
-  else if(!digitalRead(LS) && digitalRead(RS))     // turn right
+  else if((!digitalRead(LS) || !digitalRead(FLS)) && (digitalRead(RS) || digitalRead(FRS)))     // turn right
   {
+    if(digitalRead(FRS))
+    {
+          digitalWrite(LM1, LOW); 
+    digitalWrite(LM2, LOW);
+    digitalWrite(RM1, LOW);
+    digitalWrite(RM2, HIGH);
+      delay(100);
+    }
     digitalWrite(LM1, LOW); 
     digitalWrite(LM2, LOW);
     digitalWrite(RM1, LOW);
     digitalWrite(RM2, HIGH);
     Serial.println("Right");
   } 
-    else if(!digitalRead(LS) && !digitalRead(RS))     // turn right
+    else if((!digitalRead(LS) || !digitalRead(FLS)) && (!digitalRead(RS) || !digitalRead(FRS)))     // STOP
   {
     digitalWrite(LM1, LOW);
     digitalWrite(LM2, LOW);
