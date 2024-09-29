@@ -1,10 +1,10 @@
-const int ena = 8;
-#define LM1 9
-#define LM2 10
+const int ena = 5;
+#define LM1 10
+#define LM2 9
 
-#define RM1 11
-#define RM2 12
-const int enb = 13;
+#define RM1 12
+#define RM2 11
+const int enb = 6;
 
 void setup() {
   pinMode(ena, OUTPUT);
@@ -15,7 +15,7 @@ void setup() {
   pinMode(RM2, OUTPUT);
 
   analogWrite(ena, 125);
-  analogWrite(enb, 110);  
+  analogWrite(enb, 170);  
   // put your setup code here, to run once:
 
 }

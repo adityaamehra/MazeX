@@ -30,7 +30,7 @@ const int ep = 4;
 void reset(void)
 {
   analogWrite(ena,140);
-  analogWrite(enb,125);
+  analogWrite(enb,160);
 }
 // void uturn()
 // {
