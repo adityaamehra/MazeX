@@ -1,22 +1,25 @@
-const int trig1 = 1;
-const int trig2 = 3;
-const int trig3 = 5;
-const int echo1 = 2;
-const int echo2 = 4;
-const int echo3 = 6;
-const int S=7;
+#define FRS A1
+#define FLS A5
+#define RS A2
+#define MS A3
+#define LS A4 // Pin where the IR sensor is connected
+int ivm = 0;
+int ivl = 0;
+int ivr = 0;   // Variable to store the value from the sensor
 
-const int ENA = 8;
-const int IN1 = 9;
-const int IN2 = 10;
-const int IN3 = 11;
-const int IN4 = 12;
-const int ENB = 13;
+int turn=0;
+
+long dur;
+int dis;
+
+const int ENA = 5;
+#define IN1 10
+#define IN2 9
+
+#define IN3 12
+#define IN4 11
+const int ENB = 6;
 int f=1;
-
-float distance_left, duration_left;
-float distance_right, duration_right;
-float distance_str, duration_str;
 
 int x = 0; 
 
@@ -34,10 +37,10 @@ bool wall_left, wall_right, wall_str;
 
 void move_str()
 {
-    analogWrite(ENA,80);
+    analogWrite(ENA,140);
     digitalWrite(IN1, HIGH);
     digitalWrite(IN2, LOW);
-    analogWrite(ENB,92);
+analogWrite(ENB,160);
     digitalWrite(IN3, HIGH);
     digitalWrite(IN4, LOW);
     delay(330);
@@ -52,10 +55,10 @@ void move_str()
 void move_left()
 {
     dir = (dir+3)%4;
-    analogWrite(ENA, 80);
+analogWrite(ENA,140);
     digitalWrite(IN3, HIGH);
     digitalWrite(IN4, LOW);
-    analogWrite(ENB, 92);
+analogWrite(ENB,160);
     digitalWrite(IN1, LOW);
     digitalWrite(IN2, HIGH);
     delay(300);
@@ -71,10 +74,10 @@ void move_left()
 void move_right()
 {
     dir = (dir+1)%4;
-    analogWrite(ENA, 80);
+analogWrite(ENA,140);
     digitalWrite(IN3, LOW);
     digitalWrite(IN4, HIGH);
-    analogWrite(ENB, 92);
+analogWrite(ENB,160);
     digitalWrite(IN1, HIGH);
     digitalWrite(IN2, LOW);
     delay(300);
@@ -91,10 +94,10 @@ void move_back()
 {
     if(wall_left && wall_right)
     {
-      analogWrite(ENA,80);
+      analogWrite(ENA,140);
       digitalWrite(IN1, LOW);
       digitalWrite(IN2, HIGH);
-      analogWrite(ENB,92);
+  analogWrite(ENB,160);
       digitalWrite(IN3, LOW);
       digitalWrite(IN4, HIGH);
       delay(360);
@@ -663,9 +666,6 @@ void setup()
   Serial.begin(9600);
 
     ////sensors////
-    pinMode(trig1, OUTPUT);
-    pinMode(trig2, OUTPUT);
-    pinMode(trig3, OUTPUT);
     pinMode(ENA, OUTPUT);
     pinMode(ENB, OUTPUT);
     pinMode(IN1, OUTPUT);
@@ -673,13 +673,6 @@ void setup()
     pinMode(IN3, OUTPUT);
     pinMode(IN4, OUTPUT);
     //pinMode(led, OUTPUT);
-
-    pinMode(echo1, INPUT);
-    pinMode(echo2, INPUT);
-    pinMode(echo3, INPUT);
-    //pinMode(final_run, INPUT);
-    pinMode(S,INPUT);
-
 
     ////initial array////
     for (int i = 0; i < 33; i++)
@@ -708,7 +701,7 @@ void setup()
 void loop()
 {
 
-  if(digitalRead(S) && f==2)
+  if(digitalRead(MS) && digitalRead(RS) && digitalRead(LS) && digitalRead(FRS)  && digitalRead(FLS) && f==2)
   {
     sh_path();
   }
@@ -717,14 +710,7 @@ void loop()
     Serial.println(row);
     Serial.println(coloumn);
     // distance left
-    digitalWrite(trig1, LOW);
-    delayMicroseconds(2);
-    digitalWrite(trig1, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(trig1, LOW);
-    duration_left = pulseIn(echo1, HIGH);
-    distance_left = (duration_left * .0343) / 2;
-    if (distance_left < 10)
+    if (!digitalRead(FLS))
     {
         wall_left = true;
     }
@@ -734,14 +720,7 @@ void loop()
     delay(100);
     
     // distance right
-    digitalWrite(trig2, LOW);
-    delayMicroseconds(2);
-    digitalWrite(trig2, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(trig2, LOW);
-    duration_right = pulseIn(echo2, HIGH);
-    distance_right = (duration_right * .0343) / 2;
-    if (distance_right < 10)
+    if (!digitalRead(FRS))
     {
         wall_right = true;
     }
@@ -751,14 +730,7 @@ void loop()
     delay(100);
 
     // distance straight
-    digitalWrite(trig3, LOW);
-    delayMicroseconds(2);
-    digitalWrite(trig3, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(trig3, LOW);
-    duration_str = pulseIn(echo3, HIGH);
-    distance_str = (duration_str * .0343) / 2;
-    if (distance_str < 10)
+    if (!digitalRead(MS))
     {
         wall_str = true;
     }
