@@ -34,7 +34,7 @@ const int ep = 4;
 void reset(void)
 {
   analogWrite(ena,140);
-  analogWrite(enb,125);
+  analogWrite(enb,160);
 }
 void sharp_left()
 {
@@ -155,44 +155,47 @@ void loop() {
   turn=digitalRead(FLS)+digitalRead(LS)-digitalRead(RS)-digitalRead(FRS);
  if(digitalRead(MS))     // Middle Sensor On Line
  {
-    if(!digitalRead(LS) && !digitalRead(RS)) //LS and RS not on line
+  if(!digitalRead(LS) && !digitalRead(RS)) //LS and RS not on line
     {
-    reset();
     Serial.println("move forward");
     digitalWrite(LM1, LOW);
     digitalWrite(LM2, HIGH);
     digitalWrite(RM1, LOW);
     digitalWrite(RM2, HIGH);
     }
-    else if(digitalRead(LS) && !digitalRead(RS)|| turn>0) //Sharp Left
+    else if(digitalRead(LS) && !digitalRead(RS) || turn >0 ) //Sharp Left
     {
-    sharp_left();
+          analogWrite(ena,70);
+    analogWrite(enb,90);
     Serial.println("Sharp Left");
     digitalWrite(LM1, LOW);
     digitalWrite(LM2, HIGH);
-    digitalWrite(RM1, LOW); 
+    digitalWrite(RM1, HIGH); 
     digitalWrite(RM2, LOW);
     reset();
     }
-    else if(!digitalRead(LS) && digitalRead(RS)|| turn<0) //Sharp Right
+    else if(!digitalRead(LS) && digitalRead(RS) || turn < 0) //Sharp Right
     {
-    sharp_right();
+          analogWrite(ena,70);
+    analogWrite(enb,90);
     Serial.println("Sharp Right");
-    digitalWrite(LM1, LOW);
+    digitalWrite(LM1, HIGH);
     digitalWrite(LM2, LOW);
     digitalWrite(RM1, LOW);
     digitalWrite(RM2, HIGH);
-    reset();
+        reset();
     }
     else if(digitalRead(LS) && digitalRead(RS))
     {
-      reset();
       Serial.println("move forward");
       digitalWrite(LM1, LOW);
       digitalWrite(LM2, HIGH);
       digitalWrite(RM1, LOW);
       digitalWrite(RM2, HIGH);
     }}
+    
+    
+ 
 
     else
     {
@@ -201,7 +204,7 @@ void loop() {
       digitalWrite(LM2, HIGH);
       digitalWrite(RM1, LOW);
       digitalWrite(RM2, HIGH);
-      delay(5);}  
+      delay(5); 
 
      switch(TURN)
      {
@@ -416,7 +419,7 @@ void loop() {
              b--;
              break;
             
-     }
+     }}
 
 
   
